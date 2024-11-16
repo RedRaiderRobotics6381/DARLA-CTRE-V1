@@ -14,15 +14,24 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Command.AmpCmd;
+import frc.robot.Command.IntakeCmd;
+import frc.robot.Command.SpeakerCmd;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.LauncherSubsystem;
 
 public class RobotContainer {
+
+  LauncherSubsystem launchersSubsystem = new LauncherSubsystem();
+
+
+
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
+  private final CommandXboxController joystick = new CommandXboxController(0); // My joystick 
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -35,6 +44,25 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private void configureBindings() {
+
+          //Button 1 is "A" on xbox controller
+    //Button 2 is "B" on xbox controller
+    //Button 3 is "X" on xbox controller  
+    //Button 4 is "Y" on xbox controller
+    //Button 5 is "Left Bumper" on xbox controller
+    //Button 6 is "Right Bumper" on xbox controller
+    //Button 7 is "Back" on xbox controller
+    //Button 8 is "Start" on xbox controller
+    //Button 9 is "Left Joystick" on xbox controller
+    //Button 10 is "Right Joystick" on xbox controller
+    //Axis 0 is left joystick x side to side
+    //Axis 1 is left joystick y forward and back
+    //Axis 2 is left trigger 
+    //Axis 3 is right trigger
+    //Axis 4 is right joystick x side to side
+    //Axis 5 is right joystick y forward and back[\]
+
+
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
@@ -53,11 +81,20 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
+
+     joystick.rightBumper().whileTrue(new IntakeCmd(launchersSubsystem));
+     joystick.y().whileTrue(new AmpCmd(launchersSubsystem));
+     joystick.x().whileTrue(new SpeakerCmd(launchersSubsystem));
+
+
   }
 
   public RobotContainer() {
     configureBindings();
   }
+
+
+  
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");

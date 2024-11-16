@@ -7,11 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LEDsSubSystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  public static LEDsSubSystem m_LEDsSubSystem = new LEDsSubSystem();
 
   @Override
   public void robotInit() {
@@ -27,7 +29,9 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    m_LEDsSubSystem.scanEffect(60, 255, 255);
+  }
 
   @Override
   public void disabledExit() {}
@@ -52,6 +56,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_LEDsSubSystem.scanEffect(60, 255, 255);
   }
 
   @Override
