@@ -1,9 +1,9 @@
 package frc.robot.Command;
 
-import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+// import frc.robot.Constants;
 import frc.robot.subsystems.LauncherSubsystem;
 
 public class SpeakerCmd extends Command{
@@ -30,7 +30,7 @@ public class SpeakerCmd extends Command{
     //   Launcher.bottomLauncherPID.setReference(Constants.LauncherConstants.bottomSpeakerSpeed, CANSparkMax.ControlType.kSmartMotion);
     // }
 
-    Launcher.leftLauncher.set(-1.0);
+    Launcher.leftLauncher.set(1.0);
     System.out.println(Launcher.leftLauncher.getEncoder().getVelocity());
     if(Math.abs(Launcher.leftLauncher.getEncoder().getVelocity()) >= 5500) {
         Launcher.bottomLauncher.set(1.0);
@@ -42,8 +42,8 @@ public class SpeakerCmd extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Launcher.topLauncherPID.setReference(Constants.LauncherConstants.zeroSpeed, CANSparkMax.ControlType.kSmartMotion);
-    Launcher.bottomLauncherPID.setReference(Constants.LauncherConstants.zeroSpeed, CANSparkMax.ControlType.kSmartMotion);
+    Launcher.leftLauncher.set(0.0);
+    Launcher.bottomLauncher.set(0.0);
   }
 
   // Returns true when the command should end.

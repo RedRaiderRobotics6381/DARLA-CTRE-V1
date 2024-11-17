@@ -5,6 +5,7 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class LauncherSubsystem extends SubsystemBase {
@@ -25,8 +26,9 @@ public class LauncherSubsystem extends SubsystemBase {
         rightLauncher.restoreFactoryDefaults();  //Remove this when we remove the burnFlash() call below
         leftLauncher.restoreFactoryDefaults();
 
-        leftLauncher.setInverted(true);
+        leftLauncher.setInverted(false);
         rightLauncher.follow(leftLauncher, true);
+        bottomLauncher.setInverted(false);
 
         topLauncherPID = leftLauncher.getPIDController();
         bottomLauncherPID = bottomLauncher.getPIDController();
@@ -34,11 +36,16 @@ public class LauncherSubsystem extends SubsystemBase {
         // initialze PID controller and encoder objects
         // intakePIDController = intakeMotor.getPIDController();
         leftLauncher.enableVoltageCompensation(12.0);
-        leftLauncher.setSmartCurrentLimit(60);
+        leftLauncher.setSmartCurrentLimit(80);
+        leftLauncher.setIdleMode(IdleMode.kBrake);
         rightLauncher.enableVoltageCompensation(12.0);
-        rightLauncher.setSmartCurrentLimit(60);
+        rightLauncher.setSmartCurrentLimit(80);
+        rightLauncher.setIdleMode(IdleMode.kBrake);
         bottomLauncher.enableVoltageCompensation(12.0);
         bottomLauncher.setSmartCurrentLimit(80);
+        bottomLauncher.setIdleMode(IdleMode.kBrake);
+        leftLauncher.burnFlash();
+        rightLauncher.burnFlash();
         bottomLauncher.burnFlash();
         
     }

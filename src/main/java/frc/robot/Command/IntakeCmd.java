@@ -1,9 +1,9 @@
 package frc.robot.Command;
 
-import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+// import frc.robot.Constants;
 import frc.robot.subsystems.LauncherSubsystem;
 
 public class IntakeCmd extends Command{
@@ -19,8 +19,9 @@ public class IntakeCmd extends Command{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Launcher.leftLauncher.set(.5);
-    Launcher.bottomLauncher.set(.5);
+    Launcher.leftLauncher.set(-.25);
+    // Launcher.rightLauncher.set(-.25);
+    Launcher.bottomLauncher.set(-.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,8 +34,8 @@ public class IntakeCmd extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Launcher.topLauncherPID.setReference(Constants.LauncherConstants.zeroSpeed,  CANSparkMax.ControlType.kSmartMotion);
-    Launcher.bottomLauncherPID.setReference(Constants.LauncherConstants.zeroSpeed,  CANSparkMax.ControlType.kSmartMotion);
+    Launcher.leftLauncher.set(0.0);
+    Launcher.bottomLauncher.set(0.0);
   }
 
   // Returns true when the command should end.

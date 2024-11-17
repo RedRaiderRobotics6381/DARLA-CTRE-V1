@@ -18,6 +18,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    m_LEDsSubSystem.setSolidLED(30, 255, 255);
   }
 
   @Override
@@ -56,11 +57,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_LEDsSubSystem.scanEffect(60, 255, 255);
+    // m_LEDsSubSystem.scanEffect(60, 255, 255);
+    m_LEDsSubSystem.setSolidLED(120, 255, 255);
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_LEDsSubSystem.setSolidLED(120, 255, 255);
+  }
 
   @Override
   public void teleopExit() {}

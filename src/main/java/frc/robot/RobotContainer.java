@@ -4,13 +4,13 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.Utils;
+// import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -35,11 +35,11 @@ public class RobotContainer {
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.25).withRotationalDeadband(MaxAngularRate * 0.25) // Add a 10% deadband
+      .withDeadband(.625).withRotationalDeadband(.625) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -70,16 +70,16 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.b().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+    // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    // joystick.b().whileTrue(drivetrain
+    //     .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
     // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    joystick.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
-    if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-    }
+    // if (Utils.isSimulation()) {
+    //   drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    // }
     drivetrain.registerTelemetry(logger::telemeterize);
 
      joystick.rightBumper().whileTrue(new IntakeCmd(launchersSubsystem));
