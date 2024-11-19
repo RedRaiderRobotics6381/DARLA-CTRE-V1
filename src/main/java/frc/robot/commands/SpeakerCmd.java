@@ -1,4 +1,8 @@
-package frc.robot.Command;
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands;
 
 // import com.revrobotics.CANSparkMax;
 
@@ -30,10 +34,10 @@ public class SpeakerCmd extends Command{
     //   Launcher.bottomLauncherPID.setReference(Constants.LauncherConstants.bottomSpeakerSpeed, CANSparkMax.ControlType.kSmartMotion);
     // }
 
-    Launcher.leftLauncher.set(1.0);
-    System.out.println(Launcher.leftLauncher.getEncoder().getVelocity());
-    if(Math.abs(Launcher.leftLauncher.getEncoder().getVelocity()) >= 5500) {
-        Launcher.bottomLauncher.set(1.0);
+    Launcher.leaderLauncherL.set(1.0);
+    System.out.println(Launcher.leaderLauncherL.getEncoder().getVelocity());
+    if(Math.abs(Launcher.leaderLauncherL.getEncoder().getVelocity()) >= 5500) {
+        Launcher.feederLauncher.set(1.0);
     }
 
 
@@ -42,8 +46,8 @@ public class SpeakerCmd extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Launcher.leftLauncher.set(0.0);
-    Launcher.bottomLauncher.set(0.0);
+    Launcher.leaderLauncherL.set(0.0);
+    Launcher.feederLauncher.set(0.0);
   }
 
   // Returns true when the command should end.

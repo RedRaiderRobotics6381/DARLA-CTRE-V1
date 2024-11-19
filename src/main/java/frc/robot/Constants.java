@@ -18,7 +18,7 @@ public final class Constants {
   {
     public static final int kLauncherTopLeft = 21;
     public static final int kLauncherTopRight = 22;
-    public static final int kLauncherBottom = 20;
+    public static final int feederLauncher = 20;
 
     public static final double bottomIntakeSpeed = 50.0;
     public static final double topIntakeSpeed = 50.0;

@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,7 +21,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-    m_LEDsSubSystem.setSolidLED(30, 255, 255);
+        // Silence CAN bus errors during simulation
+    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   @Override
@@ -57,13 +61,20 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    // m_LEDsSubSystem.scanEffect(60, 255, 255);
-    m_LEDsSubSystem.setSolidLED(120, 255, 255);
+    m_LEDsSubSystem.setSolidLED(120, 255, 255); // Set LEDs to Green with scan effect
   }
 
   @Override
   public void teleopPeriodic() {
-    m_LEDsSubSystem.setSolidLED(120, 255, 255);
+    
+    if(DriverStation.getAlliance().get() == Alliance.Blue){
+      m_LEDsSubSystem.setSolidLED(90, 255, 255); // Set LEDs to Blue
+    } else {
+      m_LEDsSubSystem.setSolidLED(0, 255, 255); // Set LEDs to Red
+    }
+    m_robotContainer.spencerButtons();
+    // SmartDashboard.putNumber("X",m_robotContainer.joystick.getLeftX());
+    // SmartDashboard.putNumber("Y",m_robotContainer.joystick.getLeftY());
   }
 
   @Override
@@ -81,5 +92,7 @@ public class Robot extends TimedRobot {
   public void testExit() {}
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+
+  }
 }
