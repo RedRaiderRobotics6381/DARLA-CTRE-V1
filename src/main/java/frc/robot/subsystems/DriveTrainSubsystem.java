@@ -1,3 +1,6 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -30,7 +33,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.RobotContainer;
+import frc.robot.Constants;
 // import frc.robot.Telemetry;
 import frc.robot.generated.TunerConstants;
 
@@ -38,7 +41,7 @@ import frc.robot.generated.TunerConstants;
  * Class that extends the Phoenix SwerveDrivetrain class and implements
  * subsystem so it can be used in command-based projects easily.
  */
-public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
+public class DriveTrainSubsystem extends SwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -56,8 +59,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final SwerveRequest.ApplyChassisSpeeds AutoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
     private final SwerveRequest.SysIdSwerveTranslation TranslationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
-    private final SwerveRequest.SysIdSwerveRotation RotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
-    private final SwerveRequest.SysIdSwerveSteerGains SteerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
+    // private final SwerveRequest.SysIdSwerveRotation RotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    // private final SwerveRequest.SysIdSwerveSteerGains SteerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
 
 
     // PhotonVision class to keep an accurate odometry.
@@ -75,32 +78,32 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     null,
                     this));
 
-    private final SysIdRoutine SysIdRoutineRotation = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                    null,
-                    Volts.of(4),
-                    null,
-                    (state) -> SignalLogger.writeString("state", state.toString())),
-            new SysIdRoutine.Mechanism(
-                    (volts) -> setControl(RotationCharacterization.withVolts(volts)),
-                    null,
-                    this));
-    private final SysIdRoutine SysIdRoutineSteer = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                    null,
-                    Volts.of(7),
-                    null,
-                    (state) -> SignalLogger.writeString("state", state.toString())),
-            new SysIdRoutine.Mechanism(
-                    (volts) -> setControl(SteerCharacterization.withVolts(volts)),
-                    null,
-                    this));
+    // private final SysIdRoutine SysIdRoutineRotation = new SysIdRoutine(
+    //         new SysIdRoutine.Config(
+    //                 null,
+    //                 Volts.of(4),
+    //                 null,
+    //                 (state) -> SignalLogger.writeString("state", state.toString())),
+    //         new SysIdRoutine.Mechanism(
+    //                 (volts) -> setControl(RotationCharacterization.withVolts(volts)),
+    //                 null,
+    //                 this));
+    // private final SysIdRoutine SysIdRoutineSteer = new SysIdRoutine(
+    //         new SysIdRoutine.Config(
+    //                 null,
+    //                 Volts.of(7),
+    //                 null,
+    //                 (state) -> SignalLogger.writeString("state", state.toString())),
+    //         new SysIdRoutine.Mechanism(
+    //                 (volts) -> setControl(SteerCharacterization.withVolts(volts)),
+    //                 null,
+    //                 this));
 
     /* Change this to the sysid routine you want to test */
     private final SysIdRoutine RoutineToApply = SysIdRoutineTranslation;
 
     
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
+    public DriveTrainSubsystem(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configurePathPlanner();
         if (Utils.isSimulation()) {
@@ -108,7 +111,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
-    public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
+    public DriveTrainSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configurePathPlanner();
         if (Utils.isSimulation()) {
@@ -153,8 +156,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public Command driveToPose(Pose2d pose){
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
-            RobotContainer.MaxSpeed, 4.0,
-            RobotContainer.MaxAngularRate, Units.degreesToRadians(720));
+            Constants.DriveConstants.MaxSpeed, 4.0,
+            Constants.DriveConstants.MaxAngularRate, Units.degreesToRadians(720));
 
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(

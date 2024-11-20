@@ -1,7 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import org.photonvision.PhotonCamera;
@@ -13,9 +12,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.AprilTagConstants;
-import frc.robot.subsystems.FiducialVision;
+import frc.robot.subsystems.FiducialVisionSubsystem;
 import frc.robot.subsystems.LEDsSubSystem;
-import frc.robot.subsystems.ObjectVision;
+import frc.robot.subsystems.ObjectVisionSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -27,8 +26,8 @@ public class Robot extends TimedRobot {
   public static PhotonCamera camObj = new PhotonCamera("camObj"); // Create a new PhotonCamera object
   public static PhotonCamera camAprTg = new PhotonCamera("camAprTg"); // Create a new PhotonCamera object
   public static RobotContainer m_robotContainer = new RobotContainer();
-  public static ObjectVision m_objectVision = new ObjectVision(m_LEDsSubSystem);
-  public static FiducialVision m_fiducialVision = new FiducialVision(m_robotContainer.drivetrain);
+  public static ObjectVisionSubsystem m_objectVision = new ObjectVisionSubsystem(m_LEDsSubSystem);
+  public static FiducialVisionSubsystem m_fiducialVision = new FiducialVisionSubsystem(m_robotContainer.drivetrain);
 
 
   

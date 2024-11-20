@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -53,7 +57,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
  * Example PhotonVision class to aid in the pursuit of accurate odometry. Taken from
  * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
  */
-public class FiducialVision
+public class FiducialVisionSubsystem
 {
 
   /**
@@ -76,7 +80,7 @@ public class FiducialVision
   // private Supplier<Pose2d> currentPose;
   //private Pose2d currentPose;
   /**
-   * Ambiguity defined as a value between (0,1). Used in {@link FiducialVision#filterPose}.
+   * Ambiguity defined as a value between (0,1). Used in {@link FiducialVisionSubsystem#filterPose}.
    */
   private final double maximumAmbiguity = 0.25;
 
@@ -86,8 +90,8 @@ public class FiducialVision
   private Field2d field2d;
   // Telemetry telemetry;
 
-  SwerveDrivetrain swerveDrivetrain;
-  RobotContainer m_robotContainer;
+  SwerveDrivetrain m_SwerveDrivetrain;
+  RobotContainer m_RobotContainer;
 
 
   /**
@@ -96,9 +100,9 @@ public class FiducialVision
    * @param currentPose Current pose supplier, should reference {@link SwerveDrive#getPose()}
    * @param field       Current field, should be {@link SwerveDrive#field}
    */
-  public FiducialVision(SwerveDrivetrain swerveDrivetrain)
+  public FiducialVisionSubsystem(SwerveDrivetrain m_SwerveDrivetrain)
   {
-    this.swerveDrivetrain = swerveDrivetrain;
+    this.m_SwerveDrivetrain = m_SwerveDrivetrain;
     this.field2d = new Field2d();
 
     if (Robot.isSimulation())
@@ -168,8 +172,8 @@ public class FiducialVision
     int allianceAprilTag = DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 4;
     // Taken from PhotonUtils.getYawToPose()
     Pose3d speakerAprilTagPose = fieldLayout.getTagPose(allianceAprilTag).get();
-    Translation2d relativeTrl = speakerAprilTagPose.toPose2d().relativeTo(swerveDrivetrain.getState().Pose).getTranslation();
-    return new Rotation2d(relativeTrl.getX(), relativeTrl.getY()).plus(swerveDrivetrain.getState().Pose.getRotation());
+    Translation2d relativeTrl = speakerAprilTagPose.toPose2d().relativeTo(m_SwerveDrivetrain.getState().Pose).getTranslation();
+    return new Rotation2d(relativeTrl.getX(), relativeTrl.getY()).plus(m_SwerveDrivetrain.getState().Pose.getRotation());
   }
 
   /**
@@ -219,7 +223,7 @@ public class FiducialVision
   }
 
   /**
-   * The standard deviations of the estimated pose from {@link FiducialVision#getEstimatedGlobalPose(Cameras)}, for use with
+   * The standard deviations of the estimated pose from {@link FiducialVisionSubsystem#getEstimatedGlobalPose(Cameras)}, for use with
    * {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}. This should only be used
    * when there are targets visible.
    *
@@ -294,7 +298,7 @@ public class FiducialVision
       }
 
       //est pose is very far from recorded robot pose
-      if (PhotonUtils.getDistanceToPose(swerveDrivetrain.getState().Pose, pose.get().estimatedPose.toPose2d()) > 1)
+      if (PhotonUtils.getDistanceToPose(m_SwerveDrivetrain.getState().Pose, pose.get().estimatedPose.toPose2d()) > 1)
       {
         longDistangePoseEstimationCount++;
 
@@ -333,7 +337,7 @@ public class FiducialVision
   public double getDistanceFromAprilTag(int id)
   {
     Optional<Pose3d> tag = fieldLayout.getTagPose(id);
-    return tag.map(pose3d -> PhotonUtils.getDistanceToPose(swerveDrivetrain.getState().Pose, pose3d.toPose2d())).orElse(-1.0);
+    return tag.map(pose3d -> PhotonUtils.getDistanceToPose(m_SwerveDrivetrain.getState().Pose, pose3d.toPose2d())).orElse(-1.0);
   }
 
   /**
@@ -471,7 +475,7 @@ public class FiducialVision
       // https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html
       robotToCamTransform = new Transform3d(robotToCamTranslation, robotToCamRotation);
 
-      poseEstimator = new PhotonPoseEstimator(FiducialVision.fieldLayout,
+      poseEstimator = new PhotonPoseEstimator(FiducialVisionSubsystem.fieldLayout,
                                               PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                                               camera,
                                               robotToCamTransform);

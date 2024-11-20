@@ -1,8 +1,9 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
+
+import frc.robot.generated.TunerConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -14,6 +15,13 @@ package frc.robot;
  */
 public final class Constants {
   
+  public static final class DriveConstants 
+  {
+  public static double Max_Speed_Multiplier = 0.75; // Default speed multiplier
+  public static double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * Max_Speed_Multiplier; // kSpeedAt12VoltsMps desired top speed
+  public static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+  public static double userInputExponetial = 2.0; // Exponential for control stick inputs, this is used to make the stick less sensitve at slower speeds.
+  }
   public static final class LauncherConstants
   {
     public static final int kLauncherTopLeft = 21;

@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -9,13 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.subsystems.LEDsSubSystem;
 import org.photonvision.PhotonCamera;
 
-public class ObjectVision {
+public class ObjectVisionSubsystem {
     
     public static PhotonCamera camObj;
     
     private LEDsSubSystem m_LEDsSubSystem;
 
-    public ObjectVision(LEDsSubSystem ledsSubsystem) {
+    public ObjectVisionSubsystem(LEDsSubSystem ledsSubsystem) {
         m_LEDsSubSystem = ledsSubsystem;
         camObj = new PhotonCamera("camObj"); // Create a new PhotonCamera object
         //camObj = Robot.camObj;

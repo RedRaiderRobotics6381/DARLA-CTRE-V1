@@ -15,14 +15,12 @@ import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.FiducialVision;
+import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.FiducialVisionSubsystem;
 public class DriveCmd extends Command {
-    private final CommandSwerveDrivetrain m_driveTrain;
-    // private FiducialVision m_fiducialVision;
-    // private FiducialVision  m_fiducialVision;
+    private final DriveTrainSubsystem m_driveTrain;
     private final DoubleSupplier vX, vY, oX, oY;
     private final IntSupplier POV;
     private final BooleanSupplier lookTarget, hdgMode;
@@ -67,7 +65,7 @@ public class DriveCmd extends Command {
    * @param lookTarget A supplier indicating whether to look at a specific target.
    * @param hdgMode A supplier indicating whether to use heading mode.
    */
-  public DriveCmd(CommandSwerveDrivetrain m_driveTrain, FiducialVision m_fiducialVision, DoubleSupplier vX, DoubleSupplier vY,
+  public DriveCmd(DriveTrainSubsystem m_driveTrain, FiducialVisionSubsystem m_fiducialVision, DoubleSupplier vX, DoubleSupplier vY,
                   DoubleSupplier oX, DoubleSupplier oY, IntSupplier POV, BooleanSupplier lookTarget, BooleanSupplier hdgMode) {
     this.m_driveTrain = m_driveTrain;
     // this.m_fiducialVision = m_fiducialVision;
@@ -104,8 +102,8 @@ public class DriveCmd extends Command {
     double y = vY.getAsDouble(); // Get the Y-axis velocity
     double root2 = Math.sqrt(2); // Square root of 2
     double magnitude = Math.sqrt(x * x + y * y); // Magnitude of the velocity vector
-    double vXsmoothed = Math.signum(x) * Math.pow(Math.min(Math.abs(x * root2), magnitude),2); // Smooth the X-axis velocity
-    double vYsmoothed = Math.signum(y) * Math.pow(Math.min(Math.abs(y * root2), magnitude),2); // Smooth the Y-axis velocity
+    double vXsmoothed = Math.signum(x) * Math.pow(Math.min(Math.abs(x * root2), magnitude), Constants.DriveConstants.userInputExponetial); // Smooth the X-axis velocity
+    double vYsmoothed = Math.signum(y) * Math.pow(Math.min(Math.abs(y * root2), magnitude), Constants.DriveConstants.userInputExponetial); // Smooth the Y-axis velocity
 
     hdgPOV = false; // Reset POV mode flag
     
@@ -148,19 +146,19 @@ public class DriveCmd extends Command {
     if (angHdgMode || lookTarget.getAsBoolean()) // If in angle mode or looking at the target
     {
       m_driveTrain.setControl(swerveRequestFacing
-                              .withDeadband(RobotContainer.MaxSpeed * 0.1)
-                              .withVelocityX(-vYsmoothed * RobotContainer.MaxSpeed)
-                              .withVelocityY(-vXsmoothed * RobotContainer.MaxSpeed)
+                              .withDeadband(Constants.DriveConstants.MaxSpeed * 0.1)
+                              .withVelocityX(-vYsmoothed * Constants.DriveConstants.MaxSpeed)
+                              .withVelocityY(-vXsmoothed * Constants.DriveConstants.MaxSpeed)
                               .withTargetDirection(rotation));
     }
 
     if (angVelMode && !lookTarget.getAsBoolean()) // If in velocity mode and not looking at the target
     {
       m_driveTrain.setControl(fieldCentric
-                              .withDeadband(RobotContainer.MaxSpeed * 0.1)
-                              .withVelocityX(-vYsmoothed * RobotContainer.MaxSpeed)
-                              .withVelocityY(-vXsmoothed * RobotContainer.MaxSpeed)
-                              .withRotationalRate(-oX.getAsDouble() * RobotContainer.MaxAngularRate));
+                              .withDeadband(Constants.DriveConstants.MaxSpeed * 0.1)
+                              .withVelocityX(-vYsmoothed * Constants.DriveConstants.MaxSpeed)
+                              .withVelocityY(-vXsmoothed * Constants.DriveConstants.MaxSpeed)
+                              .withRotationalRate(-oX.getAsDouble() * Constants.DriveConstants.MaxAngularRate));
     }
 
   }

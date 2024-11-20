@@ -13,30 +13,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.DriveCmd;
-import frc.robot.commands.Music;
+import frc.robot.commands.MusicCmd;
 import frc.robot.commands.SpeakerCmd;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.FiducialVision;
+import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.FiducialVisionSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
 public class RobotContainer {
+  /* Local Constants */
+  private final double MaxSpeed = Constants.DriveConstants.MaxSpeed;
 
-  LauncherSubsystem launchersSubsystem = new LauncherSubsystem();
-  public static double Max_Speed_Multiplier = 0.75; // Default speed multiplier
-  public static double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps * Max_Speed_Multiplier; // kSpeedAt12VoltsMps desired top speed
-  public static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-
-  /* Setting up bindings for necessary control of the swerve drive platform */
+  /* Controllers */
   public final CommandXboxController driverXbox = new CommandXboxController(0); // My joystick 
-  public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  private FiducialVision fiducialVision;
-  public Music lalala = new Music(drivetrain);
-  /* Path follower */
-  // private Command runAuto = drivetrain.getAutoPath("Tests");
-  private final SendableChooser<Command> autoChooser;
 
+  /*  Subsytems */
+  public final DriveTrainSubsystem drivetrain = TunerConstants.DriveTrain; // My drivetrain  public final CommandXboxController driverXbox = new CommandXboxController(0); // My joystick 
+  public final LauncherSubsystem launchersSubsystem = new LauncherSubsystem();
+  private final Telemetry logger = new Telemetry(MaxSpeed);
+  private  FiducialVisionSubsystem fiducialVision;
+
+  /*  Commands */
+  public MusicCmd lalala = new MusicCmd(drivetrain);
+  private final SendableChooser<Command> autoChooser;
   private final DriveCmd c_Drive = new DriveCmd(drivetrain,
                                                 fiducialVision,
                                                 () -> driverXbox.getLeftX(),
@@ -47,12 +47,8 @@ public class RobotContainer {
                                                 () -> driverXbox.b().getAsBoolean(),
                                                 () -> driverXbox.rightStick().getAsBoolean());
 
-
   // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-
-
-  private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private void configureBindings() {
 
@@ -107,7 +103,7 @@ public class RobotContainer {
     // Holding "X" on the xbox controller will shoot note at full power
     driverXbox.x().whileTrue(new SpeakerCmd(launchersSubsystem));
     driverXbox.leftStick().whileTrue(Commands.deferredProxy(() -> drivetrain.driveToPose(
-                              FiducialVision.getAprilTagPose(Constants.AprilTagConstants.ampID,
+                              FiducialVisionSubsystem.getAprilTagPose(Constants.AprilTagConstants.ampID,
                                                             new Transform2d(0.5, 0,
                                                             Rotation2d.fromDegrees(180))))));
   }
@@ -138,18 +134,18 @@ public class RobotContainer {
   public void spencerButtons(){
     if (driverXbox.getHID().getRightBumper() == true && driverXbox.getHID().getLeftBumper() == true){
       //System.out.println("HighSpd");
-      Max_Speed_Multiplier = 1;
+      Constants.DriveConstants.Max_Speed_Multiplier = 1;
     }
 
     if (driverXbox.getHID().getRightBumper() == true && driverXbox.getHID().getLeftBumper() == false ||
         driverXbox.getHID().getRightBumper() == false && driverXbox.getHID().getLeftBumper() == true){
       //System.out.println("MedSpd");
-      Max_Speed_Multiplier = .875;
+      Constants.DriveConstants.Max_Speed_Multiplier = .875;
     }
 
     if (driverXbox.getHID().getRightBumper() == false && driverXbox.getHID().getLeftBumper() == false){
       //System.out.println("LowSpd");
-      Max_Speed_Multiplier = .75;
+      Constants.DriveConstants.Max_Speed_Multiplier = .75;
     }
   }
 

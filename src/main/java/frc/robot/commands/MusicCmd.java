@@ -7,19 +7,19 @@ package frc.robot.commands;
 import com.ctre.phoenix6.Orchestra;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DriveTrainSubsystem;
 
-public class Music extends Command {
-  private final CommandSwerveDrivetrain s_Swerve;
+public class MusicCmd extends Command {
+  private final DriveTrainSubsystem m_driveTrain;
   private final Orchestra orchestra;
   private int count;
   private double time;
   /** Creates a new Music. */
-  public Music(CommandSwerveDrivetrain s_Swerve) {
-    this.s_Swerve = s_Swerve;
+  public MusicCmd(DriveTrainSubsystem m_driveTrain) {
+    this.m_driveTrain = m_driveTrain;
     orchestra = new Orchestra();
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(s_Swerve);
+    addRequirements(m_driveTrain);
   }
 
   // Called when the command is initially scheduled.
@@ -27,8 +27,8 @@ public class Music extends Command {
   public void initialize() {
     count = (int) (Math.random() * 12);
     for(int i = 0; i < 4; i++){
-      orchestra.addInstrument(s_Swerve.getModule(i).getDriveMotor());
-      orchestra.addInstrument(s_Swerve.getModule(i).getSteerMotor());
+      orchestra.addInstrument(m_driveTrain.getModule(i).getDriveMotor());
+      orchestra.addInstrument(m_driveTrain.getModule(i).getSteerMotor());
     }
     // orchestra.addInstrument(Robot.robotContainer.s_Intake.getLoaderMotor());
     // orchestra.addInstrument(Robot.robotContainer.s_Shooter.getShooterMotors().getFirst());
