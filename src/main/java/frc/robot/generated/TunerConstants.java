@@ -39,7 +39,7 @@ public class TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final double kSlipCurrentA = 50.0; //was 150
+    private static final double kSlipCurrentA = 25.0; //was 150 We used 50 at LTC, 25 is for colcon wheels on the ATC concrete.
 
     // Initial configs for the drive and steer motors and the CANcoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.

@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+//import frc.robot.Robot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.subsystems.LEDsSubSystem;
 import org.photonvision.PhotonCamera;
@@ -15,10 +18,13 @@ public class ObjectVision {
     public ObjectVision(LEDsSubSystem ledsSubsystem) {
         m_LEDsSubSystem = ledsSubsystem;
         camObj = new PhotonCamera("camObj"); // Create a new PhotonCamera object
+        //camObj = Robot.camObj;
         camObj.setDriverMode(false); // Set the camera to driver mode
     }
 
     public void periodic() {
+        SmartDashboard.putBoolean("camObj Connected",camObj.isConnected()); // Check if the camera is connected
+        SmartDashboard.putBoolean("camObj has Targets",camObj.getLatestResult().hasTargets()); // Check if the camera has targets
     }
 
     /**

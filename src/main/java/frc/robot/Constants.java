@@ -32,5 +32,15 @@ public final class Constants {
     public static final double zeroSpeed = 0.0;
 
   }
+  public static final class AprilTagConstants
+  {
+    public static int ampID = 0;
+    public static int speakerID = 0;
+    public static int stageIDA = 0;
+    public static int stageIDB = 0;
+    public static int stageIDC = 0;
+    public static int sourceA = 0;
+    public static int sourceB = 0;
+  }
 
 }

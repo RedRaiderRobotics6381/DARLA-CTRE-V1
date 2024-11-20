@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 
 import com.revrobotics.CANSparkMax;
@@ -10,7 +9,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.REVPhysicsSim;
 
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class LauncherSubsystem extends SubsystemBase {
     
@@ -45,8 +43,6 @@ public class LauncherSubsystem extends SubsystemBase {
         followerLauncherR.burnFlash();
         feederLauncher.burnFlash();
 
-        // Define the flywheel inertia (in kg*m^2)
-        double flywheelInertia = 0.00032; // Example value, adjust as needed
 
         // Add motors to the simulation
         if (Robot.isSimulation()) {
