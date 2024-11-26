@@ -14,6 +14,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -110,7 +112,8 @@ public class DriveCmd extends Command {
     if (hdgMode.getAsBoolean() && !hdgModePressed) { // Button pressed
       hdgModePressed = true; // Button pressed, set flag to true
       holdLastRotation = true; // Set flag to hold current heading
-      holdLastRotationVal = m_driveTrain.getState().Pose.getRotation(); // Store current heading
+      holdLastRotationVal = DriverStation.getAlliance().get() == Alliance.Red ? 
+                            m_driveTrain.getState().Pose.getRotation().minus(Rotation2d.fromDegrees(180)) : m_driveTrain.getState().Pose.getRotation(); // Store current heading
       if (angHdgMode) { // If in angle mode
         angVelMode = true; // Switch to velocity mode
         angHdgMode = false; // Switch off angle mode
@@ -143,7 +146,7 @@ public class DriveCmd extends Command {
       rotation = rotationTarget; // Set rotation to target
     }
     
-    if (angHdgMode || lookTarget.getAsBoolean()) // If in angle mode or looking at the target
+    if (angHdgMode || lookTarget.getAsBoolean() ) // If in angle mode or looking at the target
     {
       m_driveTrain.setControl(swerveRequestFacing
                               .withDeadband(Constants.DriveConstants.MaxSpeed * 0.1)

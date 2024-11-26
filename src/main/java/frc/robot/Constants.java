@@ -50,5 +50,4 @@ public final class Constants {
     public static int sourceA = 0;
     public static int sourceB = 0;
   }
-
 }

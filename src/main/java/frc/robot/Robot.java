@@ -5,6 +5,8 @@ package frc.robot;
 
 import org.photonvision.PhotonCamera;
 
+import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.AprilTagConstants;
+import frc.robot.subsystems.CANdleSubSystem;
 import frc.robot.subsystems.FiducialVisionSubsystem;
 import frc.robot.subsystems.LEDsSubSystem;
 import frc.robot.subsystems.ObjectVisionSubsystem;
@@ -23,6 +26,7 @@ public class Robot extends TimedRobot {
   // public FiducialVision m_fiducialVision;
 
   public static LEDsSubSystem m_LEDsSubSystem = new LEDsSubSystem();
+  private final CANdleSubSystem m_CANdleSubSystem = new CANdleSubSystem();
   public static PhotonCamera camObj = new PhotonCamera("camObj"); // Create a new PhotonCamera object
   public static PhotonCamera camAprTg = new PhotonCamera("camAprTg"); // Create a new PhotonCamera object
   public static RobotContainer m_robotContainer = new RobotContainer();
@@ -52,7 +56,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_LEDsSubSystem.scanEffect(60, 255, 255);
+    m_LEDsSubSystem.scanEffect(282, 255, 211);
+    m_CANdleSubSystem.LarsonAnimation(148, 0, 211, 0, 0.5, BounceMode.Front, 5);// Set LEDs to Violet with bounce effect
   }
 
   @Override
@@ -79,7 +84,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_LEDsSubSystem.setSolidLED(120, 255, 255); // Set LEDs to Green with scan effect
+    if(DriverStation.getAlliance().get() == Alliance.Blue){
+      m_LEDsSubSystem.setSolidLED(90, 255, 255); // Set LEDs to Blue
+      m_CANdleSubSystem.setLEDsColor(0, 0, 255, 0, 0.5);
+
+    } else {
+      m_LEDsSubSystem.setSolidLED(0, 255, 255); // Set LEDs to Red
+      m_CANdleSubSystem.setLEDsColor(255, 0, 0, 0, 0.5);
+    }
     aprilTagAlliance();
   }
 
@@ -87,9 +99,16 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     
     if(DriverStation.getAlliance().get() == Alliance.Blue){
-      m_LEDsSubSystem.setSolidLED(90, 255, 255); // Set LEDs to Blue
+      m_LEDsSubSystem.scanEffect(90, 255, 255); // Set LEDs to Blue
+      m_CANdleSubSystem.LarsonAnimation(0, 0, 255, 0, 0.5, BounceMode.Front, 5);// Set LEDs to Violet with bounce effect
+      // m_LEDsSubSystem.setSolidLED(90, 255, 255); // Set LEDs to Blue
+      // m_CANdleSubSystem.setLEDsColor(0, 0, 255, 0, 0.5);
+
     } else {
-      m_LEDsSubSystem.setSolidLED(0, 255, 255); // Set LEDs to Red
+      m_LEDsSubSystem.scanEffect(0, 255, 255); // Set LEDs to Red
+      m_CANdleSubSystem.LarsonAnimation(255, 0, 0, 0, 0.5, BounceMode.Front, 5);// Set LEDs to Violet with bounce effect
+      // m_LEDsSubSystem.setSolidLED(0, 255, 255); // Set LEDs to Red
+      // m_CANdleSubSystem.setLEDsColor(255, 0, 0, 0, 0.5);
     }
     m_robotContainer.spencerButtons();
     m_objectVision.watchForNote();

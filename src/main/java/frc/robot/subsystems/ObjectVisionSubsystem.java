@@ -46,12 +46,12 @@ public class ObjectVisionSubsystem {
         } else {
             if (DriverStation.getAlliance().get() == Alliance.Blue) { 
                 // LEDsSubSystem.fadeEffect(120, 255);
-                m_LEDsSubSystem.scanEffect(120, 255, 255);
+                // m_LEDsSubSystem.scanEffect(120, 255, 255);
                 // m_LEDsSubSystem.strobeEffect(120, 255, 255);
                 //LEDsSubSystem.setSolidLED(120, 255, 50);
             } else {
                 // LEDsSubSystem.fadeEffect(0, 255);
-                m_LEDsSubSystem.scanEffect(0, 255, 255);
+                // m_LEDsSubSystem.scanEffect(0, 255, 255);
                 // m_LEDsSubSystem.strobeEffect(0, 255, 255);
                 //LEDsSubSystem.setSolidLED(0, 255, 50);
             }

@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.commands;
 
+import com.revrobotics.CANSparkBase.ControlType;
+
 // import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,10 +35,12 @@ public class SpeakerCmd extends Command{
     //   Launcher.bottomLauncherPID.setReference(Constants.LauncherConstants.bottomSpeakerSpeed, CANSparkMax.ControlType.kSmartMotion);
     // }
 
-    Launcher.leaderLauncherL.set(1.0);
-    System.out.println(Launcher.leaderLauncherL.getEncoder().getVelocity());
+    // Launcher.leaderLauncherL.set(1.0);
+    Launcher.leaderPIDController.setReference(5600, ControlType.kSmartVelocity);
+    // System.out.println(Launcher.leaderLauncherL.getEncoder().getVelocity());
     if(Math.abs(Launcher.leaderLauncherL.getEncoder().getVelocity()) >= 5500) {
-        Launcher.feederLauncher.set(1.0);
+        // Launcher.feederLauncher.set(1.0);
+        Launcher.feederPIDController.setReference(5000, ControlType.kSmartVelocity);
     }
 
 
@@ -45,8 +49,10 @@ public class SpeakerCmd extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Launcher.leaderLauncherL.set(0.0);
-    Launcher.feederLauncher.set(0.0);
+    // Launcher.leaderLauncherL.set(0.0);
+    // Launcher.feederLauncher.set(0.0);
+    Launcher.leaderPIDController.setReference(0, ControlType.kSmartVelocity);
+    Launcher.feederPIDController.setReference(0, ControlType.kSmartVelocity);
   }
 
   // Returns true when the command should end.
