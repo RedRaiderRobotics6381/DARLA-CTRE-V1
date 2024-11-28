@@ -4,20 +4,22 @@
 package frc.robot.commands;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkFlex;
 
 // import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 // import frc.robot.Constants;
 import frc.robot.subsystems.LauncherSubsystem;
 
 public class SpeakerCmd extends Command{
 
-    private final LauncherSubsystem Launcher;
+    private final LauncherSubsystem m_Launcher;
 
-    public SpeakerCmd(LauncherSubsystem Launcher) {
-        this.Launcher = Launcher;
-        addRequirements(Launcher);
+    public SpeakerCmd(LauncherSubsystem m_Launcher) {
+        this.m_Launcher = m_Launcher;
+        addRequirements(m_Launcher);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,11 +38,14 @@ public class SpeakerCmd extends Command{
     // }
 
     // Launcher.leaderLauncherL.set(1.0);
-    Launcher.leaderPIDController.setReference(5600, ControlType.kSmartVelocity);
+    m_Launcher.leaderPIDController.setReference(5600, ControlType.kSmartVelocity);
+    if (Robot.isSimulation()) {
+      m_Launcher.followerPIDController.setReference(5600, CANSparkFlex.ControlType.kVelocity);
+    }
     // System.out.println(Launcher.leaderLauncherL.getEncoder().getVelocity());
-    if(Math.abs(Launcher.leaderLauncherL.getEncoder().getVelocity()) >= 5500) {
+    if(Math.abs(m_Launcher.leaderLauncher.getEncoder().getVelocity()) >= 5500) {
         // Launcher.feederLauncher.set(1.0);
-        Launcher.feederPIDController.setReference(5000, ControlType.kSmartVelocity);
+        m_Launcher.feederPIDController.setReference(5000, ControlType.kSmartVelocity);
     }
 
 
@@ -51,8 +56,11 @@ public class SpeakerCmd extends Command{
   public void end(boolean interrupted) {
     // Launcher.leaderLauncherL.set(0.0);
     // Launcher.feederLauncher.set(0.0);
-    Launcher.leaderPIDController.setReference(0, ControlType.kSmartVelocity);
-    Launcher.feederPIDController.setReference(0, ControlType.kSmartVelocity);
+    m_Launcher.leaderPIDController.setReference(0, ControlType.kSmartVelocity);
+    m_Launcher.feederPIDController.setReference(0, ControlType.kSmartVelocity);
+    if (Robot.isSimulation()) {
+      m_Launcher.followerPIDController.setReference(0, CANSparkFlex.ControlType.kVelocity);
+  }
   }
 
   // Returns true when the command should end.
